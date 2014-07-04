@@ -1,0 +1,16 @@
+## ~/.xbindkeysrc
+
+"/sbin/trackpad-toggle.sh"
+	m:0x1 + c:65
+	Shift_L + space
+
+# volume up
+"/usr/bin/amixer -q sset Master 2+"
+	m:0x40 + c:30
+	MOD4 + u
+
+# volume down
+"/usr/bin/amixer -q sset Master 2-"
+	m:0x40 + c:40
+	MOD4 + d
+
