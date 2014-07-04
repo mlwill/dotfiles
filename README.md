@@ -1,3 +1,5 @@
 dotfiles
 ========
-As a first and useful step, I am planning to place working versions of all my configuration files on github.
+As a first and useful step, I am placing working versions of select configuration files on github. This serves two purposes:
+	1. Files are backed up (duh!)
+	2. Get my feet wet with the whole *git* thing...
