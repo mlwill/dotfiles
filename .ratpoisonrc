@@ -1,0 +1,44 @@
+## ~/.ratpoisonrc
+
+startup_message off
+banish
+set padding 0 0 0 0
+set barborder 0
+set border 0
+escape C-z
+exec xsetroot -cursor_name left_ptr
+## for java swing apps
+exec wmname LG3D
+
+## Make a screenshot
+alias sshot exec import -window root ~/screenshot-$(date +%F).jpg
+definekey top M-C-Print sshot
+
+## apps
+unbind c
+bind M-c exec urxvt -tr
+## Launch urxvt with a tmux session
+bind c exec urxvt -e bash -c "tmux -q has-session && exec tmux attach-session -d || exec tmux new-session "
+## Launch optimized chromium
+bind b exec bash -c 'pidof chromium &>/dev/null || exec /usr/bin/chromium --disk-cache-dir=~/tmp/cache'
+bind numbersign exec conky 
+bind asciitilde exec killall conky
+bind o exec libreoffice
+bind f exec xombrero
+
+#virtual desks
+gnewbg one
+gnewbg two
+
+#switch between windows
+definekey top M-j next
+definekey top M-k prev
+
+# switch between workspaces
+definekey top M-l exec ratpoison -c "select -" -c "gprev" -c "next"
+definekey top M-h exec ratpoison -c "select -" -c "gnext" -c "next"
+
+# Move windows to workplaces
+bind C-F10 gmove default
+bind C-F1 gmove one
+bind C-F2 gmove two
