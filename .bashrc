@@ -6,7 +6,8 @@
 [[ $- != *i* ]] && return
 
 #PS1='[\u@\h \W]\$ '
-PS1='\[\e[1;34m\][\u@\h \W]\$\[\e[0;37m\]'
+#PS1='\[\e[1;34m\][\u@\h \W]\$\[\e[0;37m\]'
+PS1='\[\e[1;38;5;34m\][\u@\h \W]\$\[\e[0;38;5;15m\]'
 PS2='> '
 PS3='> '
 PS4='+ '
@@ -35,6 +36,9 @@ alias grep='grep -n  --color=auto'
 export LESSOPEN="| /usr/bin/source-highlight-esc.sh %s"
 export LESS=' -R '
 
+## For tmux battery
+#export PATH=$PATH:/home/mike/.tmux/scripts
+
 ## Colored output for ls
 alias ls='ls --color=auto'
 eval $(dircolors -b)
@@ -58,8 +62,8 @@ alias rm="rm -i"
 alias fbr="FBReader"
 
 ## mpv
-alias sonic="mpv --playlist somafm/sonicuniverse64.pls"
-alias groove="mpv --playlist somafm/groovesalad130.pls"
+alias sonic="mpv --no-video --playlist somafm/sonicuniverse64.pls"
+alias groove="mpv --no-video --playlist somafm/groovesalad130.pls"
 alias space="mpv --playlist somafm/spacestation130.pls"
 
 ## systemctl
@@ -77,3 +81,15 @@ alias cow="cower -uv"
 
 ## Check Official Arch Repositories for updates
 alias qqu="sudo pacman -Qqu | wc -l"
+
+# Start ipython
+alias ipy="ipython --no-banner --no-confirm-exit"
+
+# Start julia 
+alias jj="julia -q --color=yes"
+
+# Start ijulia
+alias ij="ipython console --profile julia"
+
+# wifi network monitor
+alias ww="wavemon"
