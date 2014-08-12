@@ -7,11 +7,11 @@
 
 #PS1='[\u@\h \W]\$ '
 #PS1='\[\e[1;34m\][\u@\h \W]\$\[\e[0;37m\]'
-PS1='\[\e[1;38;5;34m\][\u@\h \W]\$\[\e[0;38;5;15m\]'
+PS1='\[\e[1;38;5;27m\][\u@\h \W]\$ \[\e[0;38;5;250m\]'
 PS2='> '
 PS3='> '
 PS4='+ '
-#trap 'echo -ne "\e[0m"' DEBUG
+trap 'echo -ne "\e[0m"' DEBUG
 
 case ${TERM} in
   xterm*|rxvt*|Eterm|aterm|kterm|gnome*)
@@ -48,7 +48,8 @@ alias bb="sudo bleachbit --clean system.cache system.localizations system.trash 
 alias bbh="bleachbit --clean chromium.cache chromium.cookies chromium.history chromium.vacuum chromium.current_session chromium.dom chromium.search_engines bash.history vim.history"
 
 ## Refresh mirrorlist/Update system
-alias ml="sudo reflector --verbose -l 5 --sort rate --save /etc/pacman.d/mirrorlist"
+#alias ml="sudo reflector --verbose -l 5 --sort rate --save /etc/pacman.d/mirrorlist"
+alias ml="sudo reflector --verbose --country 'United States' -l 200 -p http --sort rate --save /etc/pacman.d/mirrorlist"
 alias syy="sudo pacman -Syy"
 alias syu="sudo pacman -Syu"
 
@@ -72,6 +73,8 @@ alias re="systemctl reboot"
 
 ## virtualbox
 alias vb="virtualbox"
+alias blackarch="vboxmanage startvm 'blackarch'"
+alias web_for_pentester="vboxmanage startvm 'web_for_pentester'"
 
 ## Disable dpms and prevent screen from blanking (e.g. movies)
 alias so="xset -dpms; xset s off"
