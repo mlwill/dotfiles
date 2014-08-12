@@ -1,0 +1,534 @@
+# cli.txt 
+
+============
+ virtualbox
+============
+vboxmanage list hostonlyifs
+vboxmanage dhcpserver modify --ip 192.168.56.100 --netmask 255.255.255.0 --lowerip 192.168.56.101 --upperip 192.168.56.254 --enable --netname HostInterfaceNetworking-vboxnet0
+
+======
+ misc
+======
+# show all packages I built
+expac "%n %p" | grep "myname" | column -t
+# socket utility (man ss)
+ss -tapnl
+#add user to group
+usermod -aG <additional_groups> <user>
+# when you use a non-reparenting window manager 
+set_JAVA_AWT_WM_NONREPARENTING=1 in
+/etc/profile.d/jre.sh
+# assign static ip
+ip addr add 192.168.xx.xxx/24 broadcast 192.168.xx.255 dev <interface>
+
+=============
+ ImageMagick
+=============
+convert input.png -alpha off -fill black -opaque \#25aaba -alpha on output.png
+# list colors in image
+identify -verbose <file>
+
+xorg-server has now the ability to run without root rights with
+    the help of systemd-logind. xserver will fail to run if not launched
+    from the same virtual terminal as was used to log in.
+    Without root rights, log files will be in ~/.local/share/xorg/ directory.
+
+=====
+ vim
+=====
+# search and replace
+# replace all instances of foo with bar
+:%s/foo/bar/g
+# replace instances in current line
+:s/foo/bar/g
+
+=============
+ system info
+=============
+inxi -F
+dmidecode -t <0-42>
+sensors
+acpi
+
+## change b/w tty's alt+F<number>
+# open new tty
+ctl+alt+F<number>
+
+## tells you the number of columns.
+tput cols 
+## tells you the number of rows
+tput lines 
+
+======
+ DKMS
+======
+To build and install your modules run: dkms install vboxhost/4.3.14
+To do this automatically at startup run: systemctl enable dkms.service
+
+========
+ adsuck 
+========
+Adding adsuck group
+Adding adsuck user
+Now manipulate the regex file /var/adsuck/filter and get your /var/adsuck/hosts file
+Examples: http://www.mvps.org/winhelp2002/hosts.txt
+          http://rlwpx.free.fr/WPFF/hosts.htm
+          http://pgl.yoyo.org/adservers/serverlist.php?showintro=0;hostformat=hosts
+And make sure your setup with resolv.conf is correct.
+
+========
+ GITHUB 
+========
+# Create a new repository on the command line:
+touch README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin git@github.com:mlwill/<NEW REPO>.git
+git push -u origin master
+# Show you the remote repository aliases
+git remote -v
+
+==========================
+ get current device names 
+==========================
+# (e.g. wlp2s0)
+ls /sys/class/net
+
+=========
+ VIMDIFF 
+=========
+]c :        - next difference
+[c :        - previous difference
+do          - diff obtain
+dp          - diff put
+zo          - open folded text
+zc          - close folded text
+
+:diffupdate - re-scan the files for differences
+
+==========================
+ display color with codes 
+==========================
+for code in {0..255}; do echo -e "\e[38;05;${code}m $code: Test"; done
+
+========================
+ display all 256 colors 
+========================
+function aa_256 () 
+{ 
+    local o= i= x=`tput op` cols=`tput cols` y= oo= yy=;
+    y=`printf %$(($cols-6))s`;
+    yy=${y// /=};
+    for i in {0..256};
+    do
+        o=00${i};
+        oo=`echo -en "setaf ${i}\nsetab ${i}\n"|tput -S`;
+        echo -e "${o:${#o}-3:3} ${oo}${yy}${x}";
+    done
+}
+
+now type: aa_256 
+
+===============
+ rEFInd update 
+===============
+sudo cp /usr/share/refind/refind_x64.efi /boot/efi/EFI/refind/refind_x64.efi 
+sudo cp /usr/share/refind/refind.conf-sample /boot/efi/EFI/refind/refind.conf 
+sudo cp -r /usr/share/refind/{icons,fonts,drivers_x64} /boot/efi/EFI/refind/
+
+======
+ nmap 
+======
+# ping scan
+nmap -sP 192.168.1.0/24
+# show host interfaces and routes
+nmap --iflist
+# vbox host only adapter
+nmap --system-dns -sP <ip>
+# open ports
+nmap --open <ip>
+
+=========
+ ip link 
+=========
+# Network interface: wlp2s0/enp3s0f2
+ip link show <interface>
+ip link set dev <interface> up/down
+# check ip
+ip addr
+ip addr add <ip/24> broadcast <ip.255> dev <interface>
+
+============
+ macchanger  
+============
+# fully random
+macchanger -r <interface>
+# keep vendor bytes
+macchanger -e <interface>
+# return mac address to original, permanent hardware value
+macchanger -p <interface>
+
+===========
+ systemctl 
+===========
+# restart network
+systemctl restart netctl-auto@wlp2s0.service 
+
+=========
+ tcpdump 
+=========
+# To check that DNS queries are effectively sent encrypted, you can use tcpdump, and then surf on your computer. Run:
+sudo tcpdump -i wlp2s0 dst host 208.67.222.222 or dst host 208.67.220.220 or src host 208.67.222.222 or src host 208.67.220.220 -n
+
+==============
+ Sanity check 
+==============
+# for /etc/passwd
+sudo pwck
+# for /etc/group
+sudo grpck
+
+======
+ java 
+======
+# open java .jnlp file
+javaws filename.jnlp
+
+========
+ pacman 
+========
+# pacman: downgrade package
+cd /var/cache/pacman/pkg/
+sudo pacman -U libxcursor-1.1.14-1-x86_64.pkg.tar.xz
+# pacman: remove pkg, deps, and config files
+pacman -Rns
+# paccache: clear pacman cache of all but 1 old version
+paccache -rv -k 1
+# The following command will list any installed packages that are not in base/base-devel, 
+# and as such were likely installed manually by the user:
+comm -23 <(pacman -Qeq|sort) <(pacman -Qgq base base-devel|sort)
+# redirect stdout to packages.txt:
+> pactips.txt
+# To make sure to only remove real orphans, you should use 
+# pkg-list_true_orphans from the package pkg_scripts.
+pkg-list_true_orphans
+# list installed packages
+pacman -Qe | awk '{print $1}' > package_list.txt
+
+=============
+ libreoffice 
+=============
+Convert docx to pdf:
+libreoffice -convert-to pdf fileToConvert.docx -outdir output/path/for/pdf
+# Useful commands
+
+=============
+ imagemagick 
+=============
+# png to pdf
+convert sample.png sample.pdf
+
+==========
+ cdrecord 
+==========
+# scan for devices
+cdrecord -scanbus
+# Burn iso:
+cdrecord -v dev=2,0,0 isoimage.iso
+
+=======
+ rsync 
+=======
+# (this is recursive)
+rsync -r source destination
+# rsync over ssh
+rsync -r -e ssh .tmux.conf si0mic@192.168.56.102:/home/si0mic/
+
+=============================================
+ mount,check ==> devices,partition,directory 
+=============================================
+# mount cdrom:
+mount -t iso9660 /dev/sr0 /mnt/cdrom
+# mount ntfs partition:
+ntfs-3g /dev/your-NTFS-partition /mount-location
+# check devices and mount point
+blkid -o list
+# or use
+lsblk -f
+#check partition sizes
+df -h
+#check directory size
+du -s -h /var/log/
+#check every directory and file sizes under a dir.
+du -s -h /var/log/*
+#check individual size size
+du -s -h /var/log/lastlog
+
+=====
+ AUR 
+=====
+# AUR build problem solved by adding line:
+# error:
+/usr/bin/ld: note: 'pow@@GLIBC_2.2.5' is defined in DSO /lib/libm.so.6 
+so try adding it to the linker command line
+solution: 
+build() {
+cd ${srcdir}/${pkgname}-${pkgver}
+# build
+export LDFLAGS="$LDFLAGS -lm" #########<-add this line-###########
+./configure --prefix=/usr \
+
+============
+ navigation 
+============
+# Go to last directory
+cd -
+# Remove contents of directory but not the directory itself
+# cd into directory then
+rm -rf *
+# or 
+rm -rf path_to_directory/*
+
+=====
+ awk 
+=====
+# Extract a column of data from array
+awk '{print $1}' FILENAME >> OutputFilename
+# (The number after the dollar sign is the column you are extracting)
+# (And send it to another file)
+
+=======
+ scrot 
+=======
+# Screen shot
+$ scrot -t 20 -d 5
+
+====
+ HP 
+====
+hp-devicesettings
+
+
+======
+ gEDA 
+======
+gnetlist -g spice-sdb -o diode-vi.net diode-vi.sch
+# for AC: Vsignal waveform(DCoffset amplitude frequency)
+sin(0 10 1kHz)
+
+=========
+ NGSPICE 
+=========
+*plot dc.Vdiode  dc.i(Vdummy)
+wrdata VDtemp200 dc.Vdiode
+wrdata file netname1 [netname2 ...]
+** Operating point analysis is useful to find the 
+** biasing point of nonlinear devices
+op
+** Detailed bias point information for nonlinear devices 
+** can be obtained with the show command:
+show q1
+
+=====
+ zip 
+=====
+zip archivefile1 doc1 doc2 doc3
+# creates a file "archivefile1.zip" which contains a copy of the files 
+# doc1, doc2, and doc3, located in the current directory. 
+
+==========
+ HDMI/VGA 
+==========
+# Enable HDMI
+xrandr --output HDMI1 --auto
+# Disable HDMI
+xrandr --output HDMI1 --off
+# Enable VGA
+xrandr --output VGA1 --auto
+# Disable VGA
+xrandr --output VGA1 --auto
+# List PLAYBACK Hardware Devices
+aplay -l
+# Send sound to the device
+aplay -D plughw:0,3 /usr/share/sounds/alsa/Front_Center.wav
+
+======
+ xset 
+======
+# Disable dpms and prevent screen from blanking (e.g. movies)
+xset -dpms; xset s off
+
+========
+ python 
+========
+# Make python script executable
+# First line: #!/usr/bin/env python2
+# Change mode of file by giving execute permissions to all users: 
+chmod a+x <filename>
+
+===========
+:Julia ::
+==========
+# List Comprehensions
+IE = [IC[i] + IB for i = 1:length(IC)]
+
+# Multivariate version
+F(x,t)=.5*c*sech(sqrt(c)/2*(x-c*t-a))
+
+# Returns 11x11 array
+A=Float64[F(x,t) for x=0:10, t=0:10] # Figure out how to plot 
+
+# elementwise mult(or whatever)
+f=[1:5]
+g=[1:5]
+h=f.*g
+
+# Create an array from formula (shockley)
+# x-values
+vgs=Float64[i for i = 0:4]
+# y-values
+Id=Float64[9.27e-3*(1-vgs/3.46)^2 for vgs=0:4]
+# use Wiston to plot
+plot(vgs,Id)
+
+# evaluate expression for specific values (vs. range)
+id=[6m*(1-(vgs/-3))^2 for vgs in [-1,0,1,2]]
+
+# Integration
+quadgk(t-> t^2, 0, 1)
+
+# using Winston
+fplot(f::Function, limits[, spec])
+fplot(x-> sin(x^2), [0,8], "b")
+
+# using Polynomial
+Poly([1,1,2]) # returns ==> Poly(1x^2 + 1x^1 + 2)
+roots(Poly([1,1,2])) # returns ==> 2-element Array{Complex{Float64},1}:
+            	     #             -0.5-1.32288im
+                     #             -0.5+1.32288im
+
+# transfer function example MATLAB code p.128 of textbook
+# julia equivalent code
+# steady-state response
+
+# using Polynomial
+
+n=Poly([10])
+d=Poly([1,4])
+h=polyval(n, 4im)/polyval(d, 4im)   # -0.49999999999999994 - 1.5im
+ymag=3*abs(h)                       # 7.905694150420949
+yphase=angle(h)*180/pi           # -68.43494882292201
+println("h = ",h)
+println("ymag = ",ymag)
+println("yphase =",yphase)
+
+# construct a polynomial from its roots
+poly([-1,-2,-4]) # returns ==> Poly(1x^3 + 7x^2 + 14x^1 + 8)
+
+# using Calculus ## symbolic  diff
+differentiate("cos(x) + sin(x) + exp(-x) * cos(x)", :x)
+differentiate("cos(x) + sin(y) + exp(-x) * cos(y)", [:x, :y])
+
+#IJulia
+ipython notebook --profile julia
+
+
+===========
+:: cower ::
+===========
+
+# Check for AUR updates with cower
+cower -uv
+
+
+=============
+:: IPython ::
+=============
+
+# ipython notebook <filename>
+%pylab inline --no-import-all
+from sympy import Symbol, Interval, integrate, diff, log, oo, solve, Eq, sqrt, pi, exp
+from sympy.stats import ContinuousRV, P, E, variance, density
+from sympy.plotting import plot
+x = Symbol("X")
+k = Symbol("k")
+r = Symbol("R")
+
+# list comprehensions
+y = [x**2 for x in range(10)]
+or
+y = [x**2 for x in np.arange(0, 1.0, 0.1)]
+x = [i for i in np.arange(0, 1.0, 0.1)]
+
+#plot 
+plt.plot(x,y)
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("Example")
+plt.draw()
+plt.show()
+
+
+=======
+ sympy 
+=======
+
+from sympy import Symbol, Interval, pi, exp, sqrt
+from sympy.stats import P, E, variance, density, ContinuousRV
+from sympy.plotting import plot
+from sympy.stats import *
+from sympy import Symbol, Interval, pi, exp, sqrt
+from sympy.stats import P, E, variance, density, ContinuousRV
+from sympy.plotting import plot
+x = Symbol("X")
+pdf = 3*x**2
+X = ContinuousRV(x, pdf, Interval(0, 1))
+P(X > 0.5)
+E(X)
+variance(X)
+plot(3*x**2, (x, 0, 1), xlabel=("x"), ylabel=("y"), title=("Example"))
+E(2*cos(X)+X**2) # complex expressions are ok too
+# integrate from 0 to 1 with respect to x
+quad(lambda x:(x - .75)**2*3*x**2,0,1)
+# to integrate from 1 to infinity 
+from sympy import integrate
+from sympy import oo
+integrate(k*1/x**4,(x, 1, oo))
+# solve for the constant k of the given pdf
+solve(Eq(integrate(k/x**4,(x, 1, oo)),1),k)
+
+=======
+ scipy 
+=======
+from scipy.stats import geom
+p=1.0/4.0
+dist = geom(p)
+dist.pmf(4)
+
+=======
+ numpy 
+=======
+import numpy as np
+# numpy complex numbers
+z = a + bj
+z = complex(a,b)
+# magnitude
+abs(z)
+# angle
+np.angle(z)
+
+============
+ matplotlib 
+============
+# plot two y axes of different scale
+ax1 = fig.add_subplot(111)
+ax1.plot(t*1e3, signal*1e3, color="g", label=r'in')
+ax1.set_ylabel(r"Input Signal: Voltage ($mV$)")
+ax1.set_ylim(-15, 15)
+ax1.legend(loc=3)#, title="in")
+ax2 = ax1.twinx()
+ax2.plot(t*1e3, out, color="blue", label=r'out')
+ax2.set_ylabel(r"Output Signal: Voltage ($V$)")
+ax2.set_ylim(-4.5, 4.5)
+ax2.legend(loc=1)#, title="out")
