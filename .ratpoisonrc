@@ -5,49 +5,79 @@ banish
 set padding 0 0 0 0
 set barborder 0
 set border 0
+set winname name 
 unbind C-t
 unbind C-b
 escape C-z
+exec sh ~/.fehbg &
 exec xsetroot -cursor_name left_ptr
+exec /home/mike/scripts/ratcpi.sh
 ## Launch urxvt with a tmux session
 exec urxvt -e bash -c "tmux -q has-session && exec tmux attach-session -d || exec tmux new-session"
+## Launch optimized chromium
+#exec bash -c 'pidof chromium &>/dev/null || exec /usr/bin/chromium --disk-cache-dir=~/tmp/cache'
 ## for java swing apps
 exec wmname LG3D
+gselect 1
 
-## Make a screenshot
-alias sshot exec import -window root ~/screenshot-$(date +%F).jpg
-definekey top M-C-Print sshot
-
-alias poweroff exec systemctl poweroff
-unbind C-p
-bind C-p poweroff
 alias groove exec urxvt -tr -e bash -c "mpv --ad-lavc-threads=4 --no-video --playlist somafm/groovesalad130.pls"
 bind g groove
-
 unbind c
 bind M-c exec urxvt -tr
 bind c exec urxvt -e bash -c "tmux -q has-session && exec tmux attach-session -d || exec tmux new-session"
-## Launch optimized chromium
 bind b exec bash -c 'pidof chromium &>/dev/null || exec /usr/bin/chromium --disk-cache-dir=~/tmp/cache'
 bind numbersign exec conky 
 bind asciitilde exec killall conky
 bind o exec libreoffice
 bind f exec xombrero
+# screenshot
+definekey top print exec scrot -d 2 /home/mike/screenshots/ss-%Y-%m-%d.png && ratpoison -c "echo screenshot saved as `%Y-%m-%d`!"
 
-#virtual desks
+## Restart, reboot, halt, banish
+bind R exec ratpoison -c restart 
+bind C-BackSpace exec sudo systemctl reboot
+bind C-Escape exec sudo systemctl poweroff 
+bind BackSpace banish
+
+#virtual desks (groups)
+gnew one
 gnewbg two
 gnewbg three
 gnewbg four
+gnewbg five
+#gnewbg six
+#gnewbg seven
+#gnewbg eight
+#gnewbg nine
+gmerge default
+gdelete default
 
-#switch between windows
+# switch between windows
 definekey top M-j next
 definekey top M-k prev
 
-# switch between workspaces
+# switch between groups
 definekey top M-l exec ratpoison -c "select -" -c "gprev" -c "next"
 definekey top M-h exec ratpoison -c "select -" -c "gnext" -c "next"
 
-# Move windows to workplaces
-bind C-F1 gmove default
-bind C-F2 gmove two
-bind C-F3 gmove three
+# ALT + F* for choosing specific group
+definekey top M-F1 exec ratpoison -c "gselect 1" -c "select -" -c "only" -c "next" -c "echo one"
+definekey top M-F2 exec ratpoison -c "gselect 2" -c "select -" -c "only" -c "next" -c "echo two"
+definekey top M-F3 exec ratpoison -c "gselect 3" -c "select -" -c "only" -c "next" -c "echo three"
+definekey top M-F4 exec ratpoison -c "gselect 4" -c "select -" -c "only" -c "next" -c "echo four"
+definekey top M-F5 exec ratpoison -c "gselect 5" -c "select -" -c "only" -c "next" -c "echo five"
+#definekey top M-F6 exec ratpoison -c "gselect 6" -c "select -" -c "only" -c "next" -c "echo six"
+#definekey top M-F7 exec ratpoison -c "gselect 7" -c "select -" -c "only" -c "next" -c "echo seven"
+#definekey top M-F8 exec ratpoison -c "gselect 8" -c "select -" -c "only" -c "next" -c "echo eight"
+#definekey top M-F9 exec ratpoison -c "gselect 9" -c "select -" -c "only" -c "next" -c "echo nine"
+
+# Move windows to groups 
+definekey top C-F1 exec ratpoison -c "gmove 1" 
+definekey top C-F2 exec ratpoison -c "gmove 2"
+definekey top C-F3 exec ratpoison -c "gmove 3"
+definekey top C-F4 exec ratpoison -c "gmove 4"
+definekey top C-F5 exec ratpoison -c "gmove 5"
+#definekey top C-F6 exec ratpoison -c "gmove 6"
+#definekey top C-F7 exec ratpoison -c "gmove 7"
+#definekey top C-F8 exec ratpoison -c "gmove 8"
+#definekey top C-F9 exec ratpoison -c "gmove 9"
