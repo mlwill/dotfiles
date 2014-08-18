@@ -6,6 +6,8 @@ set padding 0 0 0 0
 set barborder 0
 set border 0
 set winname name 
+set fgcolor #1AAA13
+set bgcolor black
 unbind C-t
 unbind C-b
 escape C-z
@@ -17,7 +19,7 @@ exec urxvt -e bash -c "tmux -q has-session && exec tmux attach-session -d || exe
 ## Launch optimized chromium
 #exec bash -c 'pidof chromium &>/dev/null || exec /usr/bin/chromium --disk-cache-dir=~/tmp/cache'
 ## for java swing apps
-exec wmname LG3D
+exec wmname LG3D 
 gselect 1
 
 alias groove exec urxvt -tr -e bash -c "mpv --ad-lavc-threads=4 --no-video --playlist somafm/groovesalad130.pls"
@@ -30,8 +32,8 @@ bind numbersign exec conky
 bind asciitilde exec killall conky
 bind o exec libreoffice
 bind f exec xombrero
-# screenshot
-definekey top print exec scrot -d 2 /home/mike/screenshots/ss-%Y-%m-%d.png && ratpoison -c "echo screenshot saved as `%Y-%m-%d`!"
+## print screen 
+definekey top Print exec scrot -d 2 /home/mike/screenshots/ss-%Y-%m-%d.png && ratpoison -c "echo screenshot saved as `%Y-%m-%d`!"
 
 ## Restart, reboot, halt, banish
 bind R exec ratpoison -c restart 
